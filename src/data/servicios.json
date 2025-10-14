@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "nombre": "Envío Rápido",
+    "descripcion": "Realizamos entregas express en 24-48 horas a todo el país. Nuestro servicio de logística está optimizado para garantizar que tus productos lleguen en perfectas condiciones y en el tiempo estimado. Contamos con múltiples centros de distribución estratégicamente ubicados."
+  },
+  {
+    "id": 2,
+    "nombre": "Garantía de Productos",
+    "descripcion": "Todos nuestros productos cuentan con garantía de fábrica. Si encuentras algún defecto o problema con tu compra, nos hacemos cargo del reemplazo o devolución del dinero. Contamos con un equipo de servicio técnico disponible para asistirte."
+  },
+  {
+    "id": 3,
+    "nombre": "Atención al Cliente",
+    "descripcion": "Nuestro equipo de soporte está disponible 24/7 para responder tus preguntas y resolver tus problemas. Puedes contactarnos por teléfono, email o chat en vivo. Nos esforzamos por proporcionar la mejor experiencia posible a nuestros clientes."
+  },
+  {
+    "id": 4,
+    "nombre": "Devoluciones Fáciles",
+    "descripcion": "Tienes 30 días desde la compra para devolver cualquier producto sin hacer preguntas. El proceso es simple: solicita una etiqueta de devolución, envía el producto y nosotros procesaremos tu reembolso o cambio automáticamente."
+  },
+  {
+    "id": 5,
+    "nombre": "Ofertas Especiales",
+    "descripcion": "Disfruta de descuentos exclusivos, promociones semanales y ventas especiales. Los miembros de nuestro programa de lealtad reciben acceso anticipado a las ofertas y descuentos adicionales. Suscríbete a nuestro boletín para no perderte ninguna oportunidad."
+  },
+  {
+    "id": 6,
+    "nombre": "Pago Seguro",
+    "descripcion": "Aceptamos múltiples métodos de pago con encriptación de nivel bancario. Tus datos financieros están protegidos con tecnología SSL. Ofrecemos opciones de pago a plazos sin interés para compras superiores a cierto monto."
+  }
+]

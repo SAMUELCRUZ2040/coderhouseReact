@@ -1,23 +1,29 @@
-import CartWidget from './components/CartWidget'
-import ItemListContainer from './components/ItemListContainer'
-import NavBar from './components/navbar'
-import './stylesheets/global.css'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import NavBar from './components/NavBar';
+import AboutUs from './pages/about';
+import './stylesheets/global.css';
+import Home from './pages/home';
+import Contact from './pages/contact';
+import { Services } from './pages/service';
+import ServicesList from './components/serviceList';
+import ServiceDetail from './components/serviceDetail';
 
 function App() {
-
   return (
-    <>
-    <div className="App">
+    <BrowserRouter>
       <NavBar />
-      <div className="container mt-4">
-        <h1 className="text-center">Mi E-commerce</h1>
-        <p className="text-center">Contenido de tu aplicación aquí...</p>
+      <div className="app-container mt-4">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/about" element={<AboutUs />} />
+          <Route path="/services" element={<ServicesList />} />
+          <Route path="/services/:id" element={<ServiceDetail />} />
+          <Route path="/contact" element={<Contact />} />
+        </Routes>
       </div>
-       <CartWidget />
-        <ItemListContainer greeting="¡Explora nuestro catálogo completo de productos!" />
-    </div>
-    </>
-  )
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
