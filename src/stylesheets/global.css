@@ -50,7 +50,52 @@
   color: #555;
   line-height: 1.8;
 }
+/* Efecto hover para las cards de servicios */
+.hover-card {
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
 
+.hover-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Breadcrumb personalizado */
+.breadcrumb {
+  background-color: #f8f9fa;
+  padding: 10px 15px;
+  border-radius: 5px;
+}
+
+.breadcrumb-item a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.breadcrumb-item a:hover {
+  text-decoration: underline;
+}
+
+/* Botones con iconos de Bootstrap */
+.btn i {
+  vertical-align: middle;
+}
+
+/* Animación para el spinner */
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+}
+
+/* Cards de características */
+.bg-light.rounded {
+  transition: background-color 0.3s ease;
+}
+
+.bg-light.rounded:hover {
+  background-color: #e9ecef !important;
+}
 /* Responsive */
 @media (max-width: 768px) {
   .hover-card:hover {

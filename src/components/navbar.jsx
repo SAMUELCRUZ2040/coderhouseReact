@@ -49,13 +49,6 @@ const NavBar = () => {
               Home
             </Link>
             <Link 
-              className={`nav-link ${isActive('/about')}`} 
-              to="/about"
-              onClick={closeNavbar}
-            >
-              About
-            </Link>
-            <Link 
               className={`nav-link ${isActive('/services')}`} 
               to="/services"
               onClick={closeNavbar}

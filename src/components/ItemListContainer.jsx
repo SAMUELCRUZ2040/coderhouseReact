@@ -1,179 +1,44 @@
-import React, { useState } from 'react';
-import { useCart } from '../context/CartContext';
+import  { useState, useEffect } from 'react';
+import { collection, getDocs } from 'firebase/firestore';
 import ItemDetail from './itemDetail';
+import { db } from '../data/firebase';
+import { useCart } from '../context/cartContext';
 
 const ItemListContainer = ({ greeting }) => {
   const { addToCart } = useCart();
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
   
-  // Array de productos AMPLIADO a 16 elementos
-  const products = [
-    {
-      id: 1,
-      title: "iPhone 15 Pro",
-      description: "El iPhone más avanzado con chip A17 Pro, cámara de 48MP y titanio.",
-      price: 1199.99,
-      image: "https://via.placeholder.com/280x200?text=iPhone+15",
-      category: "Smartphones",
-      stock: 15,
-      featured: true
-    },
-    {
-      id: 2,
-      title: "MacBook Air M2",
-      description: "Ultraligera con chip M2, pantalla Liquid Retina de 13.6 pulgadas.",
-      price: 1099.99,
-      image: "https://via.placeholder.com/280x200?text=MacBook+Air",
-      category: "Laptops",
-      stock: 8,
-      featured: false
-    },
-    {
-      id: 3,
-      title: "AirPods Pro 2",
-      description: "Auriculares con cancelación de ruido adaptativa y audio espacial.",
-      price: 249.99,
-      image: "https://via.placeholder.com/280x200?text=AirPods+Pro",
-      category: "Audio",
-      stock: 25,
-      featured: true
-    },
-    {
-      id: 4,
-      title: "iPad Pro 12.9",
-      description: "Tablet profesional con chip M2 y pantalla Liquid Retina XDR.",
-      price: 1099.99,
-      image: "https://via.placeholder.com/280x200?text=iPad+Pro",
-      category: "Tablets",
-      stock: 12,
-      featured: false
-    },
-    {
-      id: 5,
-      title: "Apple Watch Ultra",
-      description: "El Apple Watch más resistente con GPS dual y batería de 36 horas.",
-      price: 799.99,
-      image: "https://via.placeholder.com/280x200?text=Watch+Ultra",
-      category: "Wearables",
-      stock: 20,
-      featured: true
-    },
-    {
-      id: 6,
-      title: "Sony WH-1000XM4",
-      description: "Auriculares premium con la mejor cancelación de ruido del mercado.",
-      price: 349.99,
-      image: "https://via.placeholder.com/280x200?text=Sony+WH1000XM4",
-      category: "Audio",
-      stock: 18,
-      featured: false
-    },
-    {
-      id: 7,
-      title: "Samsung Galaxy S24 Ultra",
-      description: "Smartphone con S Pen integrado, cámara de 200MP y pantalla AMOLED 6.8\"",
-      price: 1299.99,
-      image: "https://via.placeholder.com/280x200?text=Galaxy+S24",
-      category: "Smartphones",
-      stock: 22,
-      featured: true
-    },
-    {
-      id: 8,
-      title: "Dell XPS 15",
-      description: "Laptop profesional Intel i7, 16GB RAM, RTX 4050 y pantalla 4K OLED.",
-      price: 1899.99,
-      image: "https://via.placeholder.com/280x200?text=Dell+XPS",
-      category: "Laptops",
-      stock: 10,
-      featured: false
-    },
-    {
-      id: 9,
-      title: "Bose QuietComfort 45",
-      description: "Auriculares con cancelación de ruido líder y hasta 24 horas de batería.",
-      price: 329.99,
-      image: "https://via.placeholder.com/280x200?text=Bose+QC45",
-      category: "Audio",
-      stock: 30,
-      featured: false
-    },
-    {
-      id: 10,
-      title: "iPad Air M1",
-      description: "Tablet versátil con chip M1, soporte para Apple Pencil y Magic Keyboard.",
-      price: 599.99,
-      image: "https://via.placeholder.com/280x200?text=iPad+Air",
-      category: "Tablets",
-      stock: 18,
-      featured: true
-    },
-    {
-      id: 11,
-      title: "Garmin Fenix 7",
-      description: "Reloj deportivo GPS con mapas, monitor cardíaco y batería de 18 días.",
-      price: 699.99,
-      image: "https://via.placeholder.com/280x200?text=Garmin+Fenix",
-      category: "Wearables",
-      stock: 14,
-      featured: false
-    },
-    {
-      id: 12,
-      title: "Google Pixel 8 Pro",
-      description: "Smartphone con IA avanzada, cámara de 50MP y pantalla de 120Hz.",
-      price: 999.99,
-      image: "https://via.placeholder.com/280x200?text=Pixel+8",
-      category: "Smartphones",
-      stock: 16,
-      featured: true
-    },
-    {
-      id: 13,
-      title: "ASUS ROG Strix G16",
-      description: "Laptop gaming con Intel i9, RTX 4070, 32GB RAM y pantalla 240Hz.",
-      price: 2299.99,
-      image: "https://via.placeholder.com/280x200?text=ASUS+ROG",
-      category: "Laptops",
-      stock: 7,
-      featured: true
-    },
-    {
-      id: 14,
-      title: "JBL Flip 6",
-      description: "Altavoz Bluetooth portátil resistente al agua con sonido potente.",
-      price: 129.99,
-      image: "https://via.placeholder.com/280x200?text=JBL+Flip",
-      category: "Audio",
-      stock: 40,
-      featured: false
-    },
-    {
-      id: 15,
-      title: "Samsung Galaxy Tab S9",
-      description: "Tablet Android premium con S Pen, pantalla AMOLED y resistencia IP68.",
-      price: 799.99,
-      image: "https://via.placeholder.com/280x200?text=Galaxy+Tab",
-      category: "Tablets",
-      stock: 13,
-      featured: false
-    },
-    {
-      id: 16,
-      title: "Fitbit Charge 6",
-      description: "Pulsera fitness con GPS, monitor de frecuencia cardíaca y 7 días de batería.",
-      price: 159.99,
-      image: "https://via.placeholder.com/280x200?text=Fitbit",
-      category: "Wearables",
-      stock: 35,
-      featured: false
-    }
-  ];
-
   // Estados para filtros
-  const [filteredProducts, setFilteredProducts] = useState(products);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [showFeatured, setShowFeatured] = useState(false);
+
+  // Obtener productos desde Firebase
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        const productsCollection = collection(db, 'products');
+        const productsSnapshot = await getDocs(productsCollection);
+        const productsList = productsSnapshot.docs.map(doc => ({
+          id: doc.id, // ID de Firebase
+          ...doc.data()
+        }));
+        
+        setProducts(productsList);
+        setFilteredProducts(productsList);
+        setLoading(false);
+        console.log('Productos cargados desde Firebase:', productsList);
+      } catch (error) {
+        console.error('Error al obtener productos:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   // Obtener categorías únicas
   const categories = ['all', ...new Set(products.map(product => product.category))];
@@ -216,6 +81,20 @@ const ItemListContainer = ({ greeting }) => {
     setSelectedProduct(null);
   };
 
+  // Mostrar loading mientras carga
+  if (loading) {
+    return (
+      <div className="container my-5">
+        <div className="text-center py-5">
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Cargando...</span>
+          </div>
+          <p className="mt-3">Cargando productos desde Firebase...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="container my-5">
       {/* Modal de detalles del producto */}
@@ -225,12 +104,16 @@ const ItemListContainer = ({ greeting }) => {
           onClose={handleCloseDetails}
         />
       )}
+
       {/* Saludo personalizado */}
       {greeting && (
         <div className="row mb-4">
           <div className="col-12">
             <div className="alert alert-info text-center">
               <h3>{greeting}</h3>
+              <small className="text-muted">
+                🔥 Productos cargados desde Firebase Firestore
+              </small>
             </div>
           </div>
         </div>
@@ -319,7 +202,7 @@ const ItemListContainer = ({ greeting }) => {
                         className="btn btn-outline-info btn-sm"
                         onClick={() => handleViewDetails(product)}
                       >
-                        👁️ Ver detalles
+                        Ver detalles
                       </button>
                       <button
                         className="btn btn-primary btn-sm"

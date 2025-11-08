@@ -1,15 +1,38 @@
-import React from 'react';
-import { useCart } from '../context/CartContext';
+import { useState } from 'react';
+import { useCart } from '../context/cartContext';
 
 const ItemDetail = ({ product, onClose }) => {
   const { addToCart } = useCart();
+  const [quantity, setQuantity] = useState(1);
 
   if (!product) return null;
 
   const handleAddToCart = () => {
-    addToCart(product);
+    // Agregar la cantidad seleccionada
+    for (let i = 0; i < quantity; i++) {
+      addToCart(product);
+    }
     // Opcional: cerrar el modal después de agregar
     // onClose();
+  };
+
+  const incrementQuantity = () => {
+    if (quantity < product.stock) {
+      setQuantity(quantity + 1);
+    }
+  };
+
+  const decrementQuantity = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
+  };
+
+  const handleQuantityChange = (e) => {
+    const value = parseInt(e.target.value) || 1;
+    if (value >= 1 && value <= product.stock) {
+      setQuantity(value);
+    }
   };
 
   return (
@@ -146,6 +169,43 @@ const ItemDetail = ({ product, onClose }) => {
                 </ul>
               </div>
 
+              {/* Selector de cantidad */}
+              {product.stock > 0 && (
+                <div className="mb-4">
+                  <h5 className="mb-3">Cantidad</h5>
+                  <div className="d-flex align-items-center gap-3">
+                    <button 
+                      className="btn btn-outline-secondary"
+                      onClick={decrementQuantity}
+                      disabled={quantity <= 1}
+                      style={{ width: '40px', height: '40px' }}
+                    >
+                      -
+                    </button>
+                    <input
+                      type="number"
+                      className="form-control text-center"
+                      value={quantity}
+                      onChange={handleQuantityChange}
+                      min="1"
+                      max={product.stock}
+                      style={{ width: '80px' }}
+                    />
+                    <button 
+                      className="btn btn-outline-secondary"
+                      onClick={incrementQuantity}
+                      disabled={quantity >= product.stock}
+                      style={{ width: '40px', height: '40px' }}
+                    >
+                      +
+                    </button>
+                    <span className="text-muted">
+                      (Máximo: {product.stock})
+                    </span>
+                  </div>
+                </div>
+              )}
+
               {/* Botones de acción */}
               <div className="d-grid gap-2">
                 <button
@@ -161,7 +221,7 @@ const ItemDetail = ({ product, onClose }) => {
                   ) : (
                     <>
                       <i className="bi bi-cart-plus me-2"></i>
-                      Agregar al carrito
+                      Agregar {quantity} {quantity === 1 ? 'unidad' : 'unidades'} al carrito
                     </>
                   )}
                 </button>
