@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
+import { useCart } from '../context/CartContext';
+import ItemDetail from './itemDetail';
 
 const ItemListContainer = ({ greeting }) => {
-  // Array de productos más extenso
+  const { addToCart } = useCart();
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  
+  // Array de productos AMPLIADO a 16 elementos
   const products = [
     {
       id: 1,
@@ -62,6 +67,106 @@ const ItemListContainer = ({ greeting }) => {
       category: "Audio",
       stock: 18,
       featured: false
+    },
+    {
+      id: 7,
+      title: "Samsung Galaxy S24 Ultra",
+      description: "Smartphone con S Pen integrado, cámara de 200MP y pantalla AMOLED 6.8\"",
+      price: 1299.99,
+      image: "https://via.placeholder.com/280x200?text=Galaxy+S24",
+      category: "Smartphones",
+      stock: 22,
+      featured: true
+    },
+    {
+      id: 8,
+      title: "Dell XPS 15",
+      description: "Laptop profesional Intel i7, 16GB RAM, RTX 4050 y pantalla 4K OLED.",
+      price: 1899.99,
+      image: "https://via.placeholder.com/280x200?text=Dell+XPS",
+      category: "Laptops",
+      stock: 10,
+      featured: false
+    },
+    {
+      id: 9,
+      title: "Bose QuietComfort 45",
+      description: "Auriculares con cancelación de ruido líder y hasta 24 horas de batería.",
+      price: 329.99,
+      image: "https://via.placeholder.com/280x200?text=Bose+QC45",
+      category: "Audio",
+      stock: 30,
+      featured: false
+    },
+    {
+      id: 10,
+      title: "iPad Air M1",
+      description: "Tablet versátil con chip M1, soporte para Apple Pencil y Magic Keyboard.",
+      price: 599.99,
+      image: "https://via.placeholder.com/280x200?text=iPad+Air",
+      category: "Tablets",
+      stock: 18,
+      featured: true
+    },
+    {
+      id: 11,
+      title: "Garmin Fenix 7",
+      description: "Reloj deportivo GPS con mapas, monitor cardíaco y batería de 18 días.",
+      price: 699.99,
+      image: "https://via.placeholder.com/280x200?text=Garmin+Fenix",
+      category: "Wearables",
+      stock: 14,
+      featured: false
+    },
+    {
+      id: 12,
+      title: "Google Pixel 8 Pro",
+      description: "Smartphone con IA avanzada, cámara de 50MP y pantalla de 120Hz.",
+      price: 999.99,
+      image: "https://via.placeholder.com/280x200?text=Pixel+8",
+      category: "Smartphones",
+      stock: 16,
+      featured: true
+    },
+    {
+      id: 13,
+      title: "ASUS ROG Strix G16",
+      description: "Laptop gaming con Intel i9, RTX 4070, 32GB RAM y pantalla 240Hz.",
+      price: 2299.99,
+      image: "https://via.placeholder.com/280x200?text=ASUS+ROG",
+      category: "Laptops",
+      stock: 7,
+      featured: true
+    },
+    {
+      id: 14,
+      title: "JBL Flip 6",
+      description: "Altavoz Bluetooth portátil resistente al agua con sonido potente.",
+      price: 129.99,
+      image: "https://via.placeholder.com/280x200?text=JBL+Flip",
+      category: "Audio",
+      stock: 40,
+      featured: false
+    },
+    {
+      id: 15,
+      title: "Samsung Galaxy Tab S9",
+      description: "Tablet Android premium con S Pen, pantalla AMOLED y resistencia IP68.",
+      price: 799.99,
+      image: "https://via.placeholder.com/280x200?text=Galaxy+Tab",
+      category: "Tablets",
+      stock: 13,
+      featured: false
+    },
+    {
+      id: 16,
+      title: "Fitbit Charge 6",
+      description: "Pulsera fitness con GPS, monitor de frecuencia cardíaca y 7 días de batería.",
+      price: 159.99,
+      image: "https://via.placeholder.com/280x200?text=Fitbit",
+      category: "Wearables",
+      stock: 35,
+      featured: false
     }
   ];
 
@@ -101,14 +206,25 @@ const ItemListContainer = ({ greeting }) => {
     filterProducts(selectedCategory, newFeatured);
   };
 
-  // Función para agregar al carrito
-  const handleAddToCart = (product) => {
-    console.log(`Agregando ${product.title} al carrito`);
-    // Aquí iría tu lógica del carrito
+  // Abrir modal de detalles
+  const handleViewDetails = (product) => {
+    setSelectedProduct(product);
+  };
+
+  // Cerrar modal de detalles
+  const handleCloseDetails = () => {
+    setSelectedProduct(null);
   };
 
   return (
     <div className="container my-5">
+      {/* Modal de detalles del producto */}
+      {selectedProduct && (
+        <ItemDetail 
+          product={selectedProduct} 
+          onClose={handleCloseDetails}
+        />
+      )}
       {/* Saludo personalizado */}
       {greeting && (
         <div className="row mb-4">
@@ -167,10 +283,10 @@ const ItemListContainer = ({ greeting }) => {
       <div className="row g-4">
         {filteredProducts.length > 0 ? (
           filteredProducts.map(product => (
-            <div key={product.id} className="col-xl-4 col-lg-6 col-md-6 col-sm-12">
+            <div key={product.id} className="col-xl-3 col-lg-4 col-md-6 col-sm-12">
               <div className="card h-100 shadow-sm position-relative">
                 {product.featured && (
-                  <div className="position-absolute top-0 start-0 m-2">
+                  <div className="position-absolute top-0 start-0 m-2" style={{ zIndex: 1 }}>
                     <span className="badge bg-warning text-dark">⭐ Destacado</span>
                   </div>
                 )}
@@ -188,27 +304,29 @@ const ItemListContainer = ({ greeting }) => {
                   </div>
                   
                   <h5 className="card-title">{product.title}</h5>
-                  <p className="card-text flex-grow-1">{product.description}</p>
+                  <p className="card-text flex-grow-1" style={{ fontSize: '0.9rem' }}>
+                    {product.description}
+                  </p>
                   
                   <div className="mt-auto">
                     <div className="d-flex justify-content-between align-items-center mb-2">
-                      <h4 className="text-success mb-0">${product.price.toLocaleString()}</h4>
+                      <h5 className="text-success mb-0">${product.price.toLocaleString()}</h5>
                       <small className="text-muted">Stock: {product.stock}</small>
                     </div>
                     
-                    <div className="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <div className="d-grid gap-2">
                       <button
-                        className="btn btn-outline-info btn-sm me-md-2"
-                        onClick={() => console.log(`Ver detalles de ${product.title}`)}
+                        className="btn btn-outline-info btn-sm"
+                        onClick={() => handleViewDetails(product)}
                       >
-                        Ver detalles
+                        👁️ Ver detalles
                       </button>
                       <button
                         className="btn btn-primary btn-sm"
-                        onClick={() => handleAddToCart(product)}
+                        onClick={() => addToCart(product)}
                         disabled={product.stock === 0}
                       >
-                        {product.stock === 0 ? 'Sin stock' : 'Agregar al carrito'}
+                        {product.stock === 0 ? '❌ Sin stock' : '🛒 Agregar al carrito'}
                       </button>
                     </div>
                   </div>

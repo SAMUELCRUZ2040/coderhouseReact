@@ -1,80 +1,35 @@
-import React from 'react';
+import { useCart } from "../context/CartContext";
 
 const CartWidget = () => {
-  // Datos dinámicos para las cartas
-  const products = [
-    {
-      id: 1,
-      title: "Smartphone Pro Max",
-      description: "El último modelo con cámara de 108MP, pantalla AMOLED de 6.7 pulgadas y batería de larga duración.",
-      price: "$899.99",
-      image: "https://via.placeholder.com/300x200?text=Smartphone",
-      category: "Tecnología"
-    },
-    {
-      id: 2,
-      title: "Laptop Gaming RGB",
-      description: "Potente laptop para gaming con procesador Intel i7, RTX 4060, 16GB RAM y SSD de 1TB.",
-      price: "$1,299.99",
-      image: "https://via.placeholder.com/300x200?text=Laptop",
-      category: "Computadoras"
-    },
-    {
-      id: 3,
-      title: "Auriculares Bluetooth",
-      description: "Auriculares inalámbricos con cancelación de ruido activa y hasta 30 horas de batería.",
-      price: "$199.99",
-      image: "https://via.placeholder.com/300x200?text=Auriculares",
-      category: "Audio"
-    }
-  ];
-
-  const handleAddToCart = (productId) => {
-    console.log(`Producto ${productId} agregado al carrito`);
-    // Aquí puedes agregar la lógica para añadir al carrito
-  };
+  const { getTotalItems, toggleCart } = useCart();
+  const totalItems = getTotalItems();
 
   return (
-    <div className="container my-5">
-      <div className="row">
-        <div className="col-12">
-          <h2 className="text-center mb-4">Productos Destacados</h2>
-        </div>
-      </div>
+    <button
+      onClick={toggleCart}
+      className="btn btn-outline-primary position-relative"
+      style={{ borderRadius: '50%', width: '50px', height: '50px' }}
+    >
+      {/* Icono del carrito */}
+      <svg 
+        xmlns="http://www.w3.org/2000/svg" 
+        width="20" 
+        height="20" 
+        fill="currentColor" 
+        className="bi bi-cart3" 
+        viewBox="0 0 16 16"
+      >
+        <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+      </svg>
       
-      <div className="row g-4">
-        {products.map((product) => (
-          <div key={product.id} className="col-lg-4 col-md-6 col-sm-12">
-            <div className="card h-100 shadow-sm">
-              <img 
-                src={product.image} 
-                className="card-img-top" 
-                alt={product.title}
-                style={{ height: '200px', objectFit: 'cover' }}
-              />
-              <div className="card-body d-flex flex-column">
-                <div className="mb-2">
-                  <span className="badge bg-primary">{product.category}</span>
-                </div>
-                <h5 className="card-title">{product.title}</h5>
-                <p className="card-text flex-grow-1">{product.description}</p>
-                <div className="mt-auto">
-                  <div className="d-flex justify-content-between align-items-center">
-                    <h4 className="text-success mb-0">{product.price}</h4>
-                    <button 
-                      className="btn btn-outline-primary"
-                      onClick={() => handleAddToCart(product.id)}
-                    >
-                      <i className="bi bi-cart-plus"></i> Agregar
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
+      {/* Badge con el número de productos */}
+      {totalItems > 0 && (
+        <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+          {totalItems}
+          <span className="visually-hidden">productos en el carrito</span>
+        </span>
+      )}
+    </button>
   );
 };
 

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import CartWidget from './CartWidget';
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,14 +19,16 @@ const NavBar = () => {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+    <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
       <div className="container">
-        <Link className="navbar-brand" to="/" onClick={closeNavbar}>
+        {/* Logo/Marca */}
+        <Link className="navbar-brand fw-bold" to="/" onClick={closeNavbar}>
           Mi Tienda
         </Link>
 
+        {/* Botón hamburguesa para móvil */}
         <button 
-          className="navbar-toggler mx-auto" 
+          className="navbar-toggler" 
           type="button" 
           onClick={toggleNavbar}
           aria-controls="navbarNav" 
@@ -35,6 +38,7 @@ const NavBar = () => {
           <span className="navbar-toggler-icon"></span>
         </button>
         
+        {/* Menú de navegación */}
         <div className={`collapse navbar-collapse ${isOpen ? 'show' : ''}`} id="navbarNav">
           <div className="navbar-nav mx-auto">
             <Link 
@@ -66,6 +70,9 @@ const NavBar = () => {
               Contact
             </Link>
           </div>
+
+          {/* Widget del carrito */}
+          <CartWidget />
         </div>
       </div>
     </nav>

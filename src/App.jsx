@@ -1,28 +1,25 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import NavBar from './components/NavBar';
-import AboutUs from './pages/about';
-import './stylesheets/global.css';
-import Home from './pages/home';
-import Contact from './pages/contact';
-import { Services } from './pages/service';
-import ServicesList from './components/serviceList';
-import ServiceDetail from './components/serviceDetail';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { CartProvider } from './context/CartContext';
+import ItemListContainer from './components/ItemListContainer';
+import NavBar from './components/navbar';
+import Cart from './components/cart';
 
 function App() {
   return (
-    <BrowserRouter>
-      <NavBar />
-      <div className="app-container mt-4">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/about" element={<AboutUs />} />
-          <Route path="/services" element={<ServicesList />} />
-          <Route path="/services/:id" element={<ServiceDetail />} />
-          <Route path="/contact" element={<Contact />} />
-        </Routes>
-      </div>
-    </BrowserRouter>
+    <Router>
+      <CartProvider>
+        <div className="min-vh-100 bg-light">
+          {/* Barra de navegación con el CartWidget */}
+          <NavBar />
+          
+          {/* Carrito lateral (se muestra cuando isCartOpen es true) */}
+          <Cart />
+          
+          {/* Contenido principal */}
+          <ItemListContainer greeting="Bienvenido a Mi Tienda" />
+        </div>
+      </CartProvider>
+    </Router>
   );
 }
 
